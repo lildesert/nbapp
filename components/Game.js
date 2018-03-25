@@ -37,7 +37,13 @@ export class Game extends Component {
         } else {
             return (
                 <View style={styles.container}>
-                    <Text>{this.state.visitorTriCode} : {this.state.visitorScore} @ {this.state.homeTriCode} : {this.state.homeScore}</Text>
+                    <Text>
+                        <Text style={styles.teamCode}>{this.state.visitorTriCode} </Text>
+                        <Text style={styles.teamScore}>{this.state.visitorScore} </Text> 
+                        -                        
+                        <Text style={styles.teamScore}>{this.state.homeScore} </Text>
+                        <Text style={styles.teamCode}>{this.state.homeTriCode}</Text>
+                    </Text>
                 </View>
             );
         }
@@ -50,6 +56,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    teamCode: {
+        fontSize: 22
+    },
+    teamScore: {
+        fontSize: 18
     }
 });
   
