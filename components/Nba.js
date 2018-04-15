@@ -38,9 +38,13 @@ export class Nba extends Component {
         } else {
             return (                
                 <View style={styles.container}>
+                    {/* TODO : Afficher Date du jour sélectionné */}
+                    <Text>{DateHelper.prettyDisplay(this.state.date)}</Text>
+                    
+                    {/* TODO : Afficher Datepicker */}
                     <FlatList
                         data={this.state.gamesId}
-                        renderItem={({item}) => <GameComponent.Game gameId={item} date={this.state.date} />}
+                        renderItem={({item, index}) => <GameComponent.Game gameId={item} date={this.state.date} index={index} />}
                         keyExtractor={(item, index) => index}
                     />
                 </View>

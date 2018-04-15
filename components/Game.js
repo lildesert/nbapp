@@ -6,6 +6,7 @@ export class Game extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            index: props.index,
             gameId: props.gameId,
             date: props.date,
             loading: true,
@@ -37,7 +38,7 @@ export class Game extends Component {
         } else {
             return (
                 <View style={styles.container}>
-                    <Text>
+                    <Text style={[styles.game, this.state.index % 2 === 0 ? styles.gameEven : styles.gameOdd]}>
                         <Text style={styles.teamCode}>{this.state.visitorTriCode} </Text>
                         <Text style={styles.teamScore}>{this.state.visitorScore} </Text> 
                         -                        
@@ -56,6 +57,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    game: {
+        padding: 10
+    },
+    gameEven: {
+        backgroundColor: '#FFFFFF'
+    },
+    gameOdd: {
+        backgroundColor: '#EEEEEE'
     },
     teamCode: {
         fontSize: 22
