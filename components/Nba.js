@@ -5,59 +5,59 @@ import * as GameApi from '../api/Games.js';
 import * as DateHelper from '../helpers/DateHelper.js';
 
 export class Nba extends Component {
-    constructor (props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        let yesterday = DateHelper.getFormattedDate();
-        this.state = {
-            loading: true,
-            date: yesterday,
-            gamesId: []
-        };       
+    let yesterday = DateHelper.getFormattedDate(new Date('2018-04-21'));
+    this.state = {
+      loading: true,
+      date: yesterday,
+      gamesId: []
+    };
+  }
+
+  async componentWillMount() {
+    let games = await GameApi.getGames(this.state.date);
+    var gamesId = [];
+
+    for (var game of games) {
+      gamesId.push(game.gameId);
     }
 
-    async componentWillMount () {
-        let games = await GameApi.getGames(this.state.date);
-        var gamesId = [];
+    this.setState((prevState) => {
+      return {
+        gamesId: gamesId,
+        loading: false
+      };
+    });
+  }
 
-        for (var game of games) {
-            gamesId.push(game.gameId);
-        }
+  render() {
+    if (this.state.loading) {
+      return (<ActivityIndicator size='large' style={{ height: 80 }} />);
+    } else {
+      return (
+        <View style={styles.container}>
+          {/* TODO : Afficher Date du jour sélectionné */}
+          <Text>{DateHelper.prettyDisplay(this.state.date)}</Text>
 
-        this.setState((prevState) => {
-            return {
-                gamesId: gamesId,
-                loading: false
-            };
-        });
+          {/* TODO : Afficher Datepicker */}
+          <FlatList
+            data={this.state.gamesId}
+            renderItem={({ item, index }) => <GameComponent.Game gameId={item} date={this.state.date} index={index} />}
+            keyExtractor={(item, index) => index}
+          />
+        </View>
+      );
     }
-
-    render () {
-        if(this.state.loading){
-            return( <ActivityIndicator size='large' style={{height:80}} /> );
-        } else {
-            return (                
-                <View style={styles.container}>
-                    {/* TODO : Afficher Date du jour sélectionné */}
-                    <Text>{DateHelper.prettyDisplay(this.state.date)}</Text>
-                    
-                    {/* TODO : Afficher Datepicker */}
-                    <FlatList
-                        data={this.state.gamesId}
-                        renderItem={({item, index}) => <GameComponent.Game gameId={item} date={this.state.date} index={index} />}
-                        keyExtractor={(item, index) => index}
-                    />
-                </View>
-            );
-        }
-    }
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
