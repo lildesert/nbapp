@@ -9,7 +9,7 @@ function getGames (date) {
       return json.games;
     })
     .catch((error) => {
-        console.log("error 1");
+      console.log("error 1 : " + error);
     });
 }
 
@@ -22,7 +22,7 @@ function getGame (date, gameId) {
       return json;
     })
     .catch((error) => {
-        console.log("error 2");
+      console.log("error 2 : " + error);
     });
 }
 
