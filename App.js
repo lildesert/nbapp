@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import { Nba } from './components/Nba.js'
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { Nba } from './components/Nba.js';
 
 export default class App extends React.Component {
   render() {
@@ -19,5 +20,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: getStatusBarHeight(),
   }
 });
