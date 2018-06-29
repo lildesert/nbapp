@@ -39,7 +39,7 @@ export class Nba extends Component {
       return (
         <View style={styles.container}>
           {/* TODO : Afficher Date du jour sélectionné */}
-          <Text>{DateHelper.prettyDisplay(this.state.date)}</Text>
+          <Text style={[styles.date]}>{DateHelper.prettyDisplay(this.state.date)}</Text>
 
           {/* TODO : Afficher Datepicker */}
           <FlatList
@@ -59,5 +59,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  date: {
+    marginBottom: 20
   }
 });
