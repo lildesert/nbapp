@@ -1,25 +1,55 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { Nba } from './components/Nba.js';
+import { Games } from './components/Games';
+import { createStackNavigator } from 'react-navigation';
 
-export default class App extends React.Component {
+class HomeScreen extends React.Component {
+  static navigationOptions = {
+    title: 'NbApp',
+  };
+  constructor() {
+    super();
+    this.detailsView = this.detailsView.bind(this);
+  }
+  detailsView() {
+    this.props.navigation.navigate('GameDetails');
+  }
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Nbapp</Text>
-        <Nba />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Games onPress={this.detailsView} />
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: getStatusBarHeight(),
+class GameDetailsScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.getParam('gameTitle'),
+    };
+  };
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Game Details Screen</Text>
+      </View>
+    );
   }
-});
+}
+
+const RootStack = createStackNavigator(
+  {
+    Home: HomeScreen,
+    GameDetails: GameDetailsScreen,
+  },
+  {
+    initialRouteName: 'Home',
+  }
+);
+
+export default class App extends React.Component {
+  render() {
+    return <RootStack />;
+  }
+}

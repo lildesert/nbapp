@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, Dimensions, TouchableOpacity } from 'react-native';
 import * as GameApi from '../api/Games.js';
 import teamInfo from '../utils/TeamMap';
 
@@ -34,18 +34,15 @@ export class Game extends Component {
   }
 
   render() {
+    const { onPress } = this.props;
     if (this.state.loading) {
       return (<ActivityIndicator size='large' style={{ height: 80 }} />);
     } else {
       return (
         <View style={styles.container}>
-          <Text style={[styles.game, this.state.index % 2 === 0 ? styles.gameEven : styles.gameOdd]}>
-            <Text style={styles.teamCode}>{this.state.visitorTriCode} </Text>
-            <Text style={styles.teamScore}>{this.state.visitorScore} </Text>
-            -
-            <Text style={styles.teamScore}>{this.state.homeScore} </Text>
-            <Text style={styles.teamCode}>{this.state.homeTriCode}</Text>
-          </Text>
+          <TouchableOpacity style={styles.game} onPress={() => { onPress('GameDetails'); }}>
+            <Text style={[styles.gameLabel, this.state.index % 2 === 0 ? styles.gameEven : styles.gameOdd]}>{this.state.visitorTriCode} {this.state.visitorScore} -  {this.state.homeScore} {this.state.homeTriCode}</Text>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -63,9 +60,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   game: {
-    width: deviceWidth,
-    textAlign: 'center',
-    padding: 20,
+    width: deviceWidth
   },
   gameEven: {
     color: '#ffffff',
@@ -74,10 +69,9 @@ const styles = StyleSheet.create({
   gameOdd: {
     backgroundColor: '#ffffff'
   },
-  teamCode: {
-    fontSize: 22
-  },
-  teamScore: {
-    fontSize: 18
+  gameLabel: {
+    textAlign: 'center',
+    padding: 20,
+    fontSize: 20
   }
 });

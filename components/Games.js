@@ -4,16 +4,21 @@ import * as GameComponent from '../components/Game.js';
 import * as GameApi from '../api/Games.js';
 import * as DateHelper from '../helpers/DateHelper.js';
 
-export class Nba extends Component {
+export class Games extends Component {
   constructor(props) {
     super(props);
-
-    let yesterday = DateHelper.getFormattedDate(new Date('2018-04-21'));
+    this.detailsView = this.detailsView.bind(this);
+    let gamesDate = DateHelper.getFormattedDate(new Date('2018-04-21'));
     this.state = {
       loading: true,
-      date: yesterday,
+      date: gamesDate,
       gamesId: []
     };
+  }
+
+  detailsView() {
+    const { onPress } = this.props;
+    onPress('YourPage');
   }
 
   async componentWillMount() {
@@ -44,7 +49,7 @@ export class Nba extends Component {
           {/* TODO : Afficher Datepicker */}
           <FlatList
             data={this.state.gamesId}
-            renderItem={({ item, index }) => <GameComponent.Game gameId={item} date={this.state.date} index={index} />}
+            renderItem={({ item, index }) => <GameComponent.Game onPress={this.detailsView} gameId={item} date={this.state.date} index={index} />}
             keyExtractor={(item, index) => index}
           />
         </View>
@@ -61,6 +66,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   date: {
-    marginBottom: 20
+    fontSize: 18,
+    marginVertical: 20
   }
 });
