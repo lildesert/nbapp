@@ -37,8 +37,15 @@ export class Game extends Component {
     } else {
       return (
         <View style={styles.container}>
-          <TouchableOpacity style={styles.game} onPress={() => { onPress('GameDetails'); }}>
-            <Text style={[styles.gameLabel, this.state.index % 2 === 0 ? styles.gameEven : styles.gameOdd]}>{this.state.visitorTriCode} {this.state.visitorScore} -  {this.state.homeScore} {this.state.homeTriCode}</Text>
+          <TouchableOpacity style={styles.game} onPress={() => {
+            onPress('GameDetails', {
+              gameId: this.state.gameId,
+              date: this.state.date
+            });
+          }}>
+            <Text style={[styles.gameLabel, this.state.index % 2 === 0 ? styles.gameEven : styles.gameOdd]}>
+              {this.state.visitorTriCode} {this.state.visitorScore} - {this.state.homeScore} {this.state.homeTriCode}
+            </Text>
           </TouchableOpacity>
         </View>
       );

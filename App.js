@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Games } from './components/Games';
+import { GameDetails } from './components/GameDetails';
 import { createStackNavigator } from 'react-navigation';
 
 class HomeScreen extends React.Component {
@@ -11,8 +12,8 @@ class HomeScreen extends React.Component {
     super();
     this.detailsView = this.detailsView.bind(this);
   }
-  detailsView() {
-    this.props.navigation.navigate('GameDetails');
+  detailsView(route, params) {
+    this.props.navigation.navigate(route, params);
   }
   render() {
     return (
@@ -30,9 +31,12 @@ class GameDetailsScreen extends React.Component {
     };
   };
   render() {
+    const { navigation } = this.props;
+    const gameId = navigation.getParam('gameId');
+    const date = navigation.getParam('date');
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Game Details Screen</Text>
+      <View style={{ flex: 1 }}>
+        <GameDetails gameId={gameId} date={date} />
       </View>
     );
   }
