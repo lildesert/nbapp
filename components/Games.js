@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, ActivityIndicator, FlatList } from 'react-native';
 import * as GameComponent from '../components/Game.js';
-import * as GameApi from '../api/Games.js';
+import * as GameApi from '../api/GamesApi';
 import * as DateHelper from '../helpers/DateHelper.js';
 
 export class Games extends Component {
@@ -16,22 +16,16 @@ export class Games extends Component {
     };
   }
 
-  detailsView() {
+  detailsView(route, params) {
     const { onPress } = this.props;
-    onPress('YourPage');
+    onPress(route, params);
   }
 
   async componentWillMount() {
     let games = await GameApi.getGames(this.state.date);
-    var gamesId = [];
-
-    for (var game of games) {
-      gamesId.push(game.gameId);
-    }
-
     this.setState((prevState) => {
       return {
-        gamesId: gamesId,
+        games: games,
         loading: false
       };
     });
@@ -48,8 +42,8 @@ export class Games extends Component {
 
           {/* TODO : Afficher Datepicker */}
           <FlatList
-            data={this.state.gamesId}
-            renderItem={({ item, index }) => <GameComponent.Game onPress={this.detailsView} gameId={item} date={this.state.date} index={index} />}
+            data={this.state.games}
+            renderItem={({ item, index }) => <GameComponent.Game onPress={this.detailsView} game={item} date={this.state.date} index={index} />}
             keyExtractor={(item, index) => index}
           />
         </View>
