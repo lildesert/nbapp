@@ -1,4 +1,8 @@
-import React from 'react';
+
+const players = {
+  isLoaded: false,
+  data: []
+}
 
 // Api docs: https://github.com/kshvmdn/nba.js/blob/master/docs/api/DATA.md
 
@@ -6,11 +10,16 @@ import React from 'react';
 // http://http://data.nba.net/data/10s/prod/v1/{{year}}/players.json
 // year = 2018
 async function getPlayers(year) {
+  if (players.isLoaded) {
+    return players.data;
+  }
   const query = new Request('http://data.nba.net/10s/prod/v1/' + year + '/players.json');
   return fetch(query)
     .then(response => response.json())
     .then(json => {
-      return json.league.standard;
+      players.isLoaded = true;
+      players.data = json.league.standard;
+      return players.data;
     })
     .catch((error) => {
       console.log("error getPlayers : " + error);

@@ -1,4 +1,3 @@
-import React from 'react';
 
 // Fetch all games of the day
 // http://data.nba.net/10s/prod/v1/{{date}}/scoreboard.json
