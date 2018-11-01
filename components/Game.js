@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator, Dimensions, TouchableOpacity } from 'react-native';
-import * as GameApi from '../api/Games.js';
-import teamInfo from '../utils/TeamMap';
 
 export class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
       index: props.index,
-      gameId: props.gameId,
+      game: props.game,
+      gameId: props.game.gameId,
       date: props.date,
       loading: true,
       homeScore: 0,
@@ -19,18 +18,16 @@ export class Game extends Component {
   }
 
   async componentWillMount() {
-    if (this.state.gameId !== 0 && this.state.date !== "") {
-      let game = await GameApi.getGame(this.state.date, this.state.gameId);
-      this.setState((prevState) => {
-        return {
-          homeScore: game.basicGameData.hTeam.score,
-          homeTriCode: game.basicGameData.hTeam.triCode,
-          visitorScore: game.basicGameData.vTeam.score,
-          visitorTriCode: game.basicGameData.vTeam.triCode,
-          loading: false
-        };
-      });
-    }
+    let game = this.state.game;
+    this.setState((prevState) => {
+      return {
+        homeScore: game.hTeam.score,
+        homeTriCode: game.hTeam.triCode,
+        visitorScore: game.vTeam.score,
+        visitorTriCode: game.vTeam.triCode,
+        loading: false
+      };
+    });
   }
 
   render() {
@@ -40,8 +37,15 @@ export class Game extends Component {
     } else {
       return (
         <View style={styles.container}>
-          <TouchableOpacity style={styles.game} onPress={() => { onPress('GameDetails'); }}>
-            <Text style={[styles.gameLabel, this.state.index % 2 === 0 ? styles.gameEven : styles.gameOdd]}>{this.state.visitorTriCode} {this.state.visitorScore} -  {this.state.homeScore} {this.state.homeTriCode}</Text>
+          <TouchableOpacity style={styles.game} onPress={() => {
+            onPress('GameDetails', {
+              gameId: this.state.gameId,
+              date: this.state.date
+            });
+          }}>
+            <Text style={[styles.gameLabel, this.state.index % 2 === 0 ? styles.gameEven : styles.gameOdd]}>
+              {this.state.visitorTriCode} {this.state.visitorScore} - {this.state.homeScore} {this.state.homeTriCode}
+            </Text>
           </TouchableOpacity>
         </View>
       );
