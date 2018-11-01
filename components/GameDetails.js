@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator, Image } from 'react-native';
 import * as GameApi from '../api/GamesApi';
+import * as PlayersApi from '../api/PlayersApi';
 import teamMap from '../utils/TeamMap';
 
 export class GameDetails extends Component {
@@ -20,8 +21,27 @@ export class GameDetails extends Component {
   async componentWillMount() {
     if (this.state.gameId !== 0 && this.state.date !== "") {
       let game = await GameApi.getGame(this.state.date, this.state.gameId);
+      let players = await PlayersApi.getPlayers(new Date().getFullYear());
       this.homeTeam = this.teamMapById[game.basicGameData.hTeam.teamId];
       this.visitorTeam = this.teamMapById[game.basicGameData.vTeam.teamId];
+
+      let homePlayersStats = [], awayPlayersStats = [];
+      for (let p in game.stats.activePlayers) {
+        let playerStat = game.stats.activePlayers[p];
+        let playerInfo = players.find(player => player.personId == playerStat.personId);
+        if (playerInfo != undefined) {
+          playerStat.firstName = playerInfo.firstName;
+          playerStat.lastName = playerInfo.lastName;
+          playerStat.pos = playerInfo.pos;
+          playerStat.jersey = playerInfo.jersey;
+          if (playerStat.teamId == this.homeTeam.id) {
+            homePlayersStats.push(playerStat);
+          } else {
+            awayPlayersStats.push(playerStat);
+          }
+        }
+      }
+
       this.setState((prevState) => {
         return {
           homeLogo: this.homeTeam.logo,
@@ -30,7 +50,8 @@ export class GameDetails extends Component {
           homeTriCode: game.basicGameData.hTeam.triCode,
           visitorScore: game.basicGameData.vTeam.score,
           visitorTriCode: game.basicGameData.vTeam.triCode,
-          playerStats: game.stats.activePlayers,
+          homePlayersStats: homePlayersStats,
+          awayPlayersStats: awayPlayersStats,
           loading: false
         };
       });
